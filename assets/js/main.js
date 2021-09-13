@@ -1,16 +1,48 @@
 console.log('wetter_app')
 
-//2. mit fetch hole die items von json
-function loadItems(){ //erstellen loaditems
-return fetch(`https://api.openweathermap.org/data/2.5/weather?q={frankfurt}&appid={2b0cb25f287b7f394bba52521a54c757}`)
-.then(response=>console.log(response)) // der macht:object 'response' übergeben
+//1. mit fetch hole data von json
+function showData(){ 
+
+    return fetch(`https://api.openweathermap.org/data/2.5/weather?q=frankfurt,DE&lang=de&appid=a8ce46a3c76b754bd7786a22f785f812`)
+    // .then(response=>console.log(response))// der macht:object 'response' übergeben
+        .then(response=>response.json()) //konvert response body zum object mit json-api in response object
+        .then(data=>{
+            console.log(data);
+            let newTuete=data.weather
+            console.log(newTuete);
+
+            newTuete.forEach(elt=>{
+                let main=elt.main
+                let description=elt.description
+              
+                let newTuete2=new Container(main,description)
+            newTuete2.showContainer();
+        })
+    
+    } ) //data return
+
 }
 
 
-
-
-// 1.wenn json-datei ausgeführt wird,wird sie mit dieser Func.ausgefürt
-loadItems()//der macht:daten lesen und mit promise übergeben.
-.then(items=>{
-    // displayItems(items); // auf dem display anzeigen und zur Func.übergeben
-}) //items übergeben.
+showData ()
+class Container{
+    constructor(
+        main,
+        description,
+      
+        
+    ){
+        this.main = main;
+        this.description=description;
+      
+     
+    }
+    showContainer(){
+        document.getElementById("currentData").innerHTML +=`
+        <p>${this.main}</p>
+        <p>${this.description}</p>
+     
+           
+        `
+    }
+}
